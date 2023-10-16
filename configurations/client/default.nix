@@ -1,10 +1,7 @@
 { pkgs, ... }:
 
 {
-  networking = {
-    hostName = "genesis";
-    networkmanager.enable = true;
-  };
+  networking.networkmanager.enable = true;
 
   environment.systemPackages = with pkgs; [
     amdctl
