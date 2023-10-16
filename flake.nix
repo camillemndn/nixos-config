@@ -100,27 +100,27 @@
 
         extraModules = lib.attrValues self.nixosModules ++ [
           home-manager.nixosModules.home-manager
-          hyprland.nixosModules.default
           lanzaboote.nixosModules.lanzaboote
           musnix.nixosModules.musnix
           nix-index-database.nixosModules.nix-index
           nixos-wsl.nixosModules.wsl
           simple-nixos-mailserver.nixosModule
           sops-nix.nixosModules.sops
-          {
-            imports = [
-              "${nixpkgs}/nixos/modules/services/web-apps/jitsi-meet.nix"
-              "${nixpkgs}/nixos/modules/programs/firefox.nix"
-            ];
-            disabledModules = [
-              "services/web-apps/jitsi-meet.nix"
-              "programs/firefox.nix"
-            ];
-          }
+          #{
+          #  imports = [
+          #    "${nixpkgs}/nixos/modules/services/web-apps/jitsi-meet.nix"
+          #    "${nixpkgs}/nixos/modules/programs/firefox.nix"
+          #  ];
+          #  disabledModules = [
+          #    "services/web-apps/jitsi-meet.nix"
+          #    "programs/firefox.nix"
+          #  ];
+          #}
         ] ++ (import ./profiles);
       in
 
       {
+        inherit nixpkgs;
         packages.${system} = import ./pkgs/top-level { inherit pkgs; };
 
         overlays.${system} = import ./overlays { inherit lib pkgs inputs system; };
@@ -152,7 +152,7 @@
           inherit (inputs) self;
         };
 
-        # colmena = import ./colmena.nix { inherit lib pkgs self inputs nixpkgs; };
+        colmena = import ./colmena.nix { inherit lib pkgs self; };
 
         devShells.${system}.default = pkgs.mkShell { buildInputs = with pkgs; [ age colmena nixos-generators sops ]; };
       });

@@ -1,4 +1,4 @@
-{ lib, pkgs, inputs, system, ... }:
+{ lib, pkgs, inputs, system }:
 
 with inputs;
 
@@ -6,7 +6,6 @@ _: _: lib.updateManyAttrs [
   # Adds all the packages from this flake
   self.packages.${system}
   {
-    inherit lib;
     pinned = import nixpkgs-pinned { inherit system; inherit (pkgs) config; };
 
     # Adds some packages from other flakes

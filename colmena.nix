@@ -1,4 +1,4 @@
-{ self, lib, pkgs }:
+{ lib, pkgs, self }:
 
 {
   meta = {
@@ -9,7 +9,8 @@
   };
 } // builtins.mapAttrs
   (n: v: {
-    imports = v._module.args.modules;
-    inherit (self.machines.${n}) deployment;
+    imports = v._module.args.modules ++ v._module.args.extraModules;
+    #nixpkgs.config = lib.mkForce { };
+    deployment = self.machines.${n}.deployment // { buildOnTarget = lib.mkDefault true; };
   })
   self.nixosConfigurations

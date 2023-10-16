@@ -1,4 +1,4 @@
-{ lib, pkgs, extraModules, extraHomeModules, self, nixpkgs, system, ... }:
+{ lib, extraModules, extraHomeModules, nixpkgs, pkgs, self, system }:
 
 let
   nixosSystem' =
@@ -10,10 +10,12 @@ let
       {
         inherit lib;
         specialArgs = { inherit self nixpkgs; };
+        baseModules = import "${nixpkgs}/nixos/modules/module-list.nix";
         modules = extraModules ++ [
           (import ./${configuration})
           (import ../hardware/${hardware})
           {
+            #imports = [ self.inputs.nixpkgs.nixosModules.readOnlyPkgs ];
             nixpkgs = { inherit pkgs; };
 
             home-manager = {
